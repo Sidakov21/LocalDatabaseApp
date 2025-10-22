@@ -12,6 +12,9 @@ class TaskAdapter(
     private val onTaskClick: (Task) -> Unit
 ) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback()) {
 
+    // 🔹 Храним все задачи отдельно
+    private var allTasks: List<Task> = emptyList()
+
     inner class TaskViewHolder(private val binding: ItemTaskBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
@@ -36,5 +39,21 @@ class TaskAdapter(
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    // 🔹 Обновляем список и сохраняем оригинальные данные
+    fun submitFullList(tasks: List<Task>) {
+        allTasks = tasks
+        submitList(tasks)
+    }
+
+    // 🔹 Фильтрация по названию
+    fun filter(query: String?) {
+        val filteredList = if (query.isNullOrBlank()) {
+            allTasks
+        } else {
+            allTasks.filter { it.title.contains(query, ignoreCase = true) }
+        }
+        submitList(filteredList)
     }
 }

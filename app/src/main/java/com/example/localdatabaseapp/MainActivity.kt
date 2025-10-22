@@ -1,6 +1,7 @@
 package com.example.localdatabaseapp
 
 import android.os.Bundle
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity()
 
         // Наблюдаем за изменениями
         viewModel.allTasks.observe(this) { tasks ->
-            adapter.submitList(tasks)
+            adapter.submitFullList(tasks)
         }
 
         // Добавление задачи
@@ -38,5 +39,16 @@ class MainActivity : AppCompatActivity()
                 binding.etCategory.text.clear()
             }
         }
+
+        val searchView = findViewById<SearchView>(R.id.searchView)
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter(newText)
+                return true
+            }
+        })
     }
 }

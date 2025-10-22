@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
     <EditText
         android:id="@+id/etTitle"
         android:layout_width="match_parent"
@@ -27,6 +29,12 @@
         android:text="Добавить задачу"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:queryHint="Поиск задач..." />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
