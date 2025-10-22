@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity()
             }
         }
 
+        // Поиск
         val searchView = findViewById<SearchView>(R.id.searchView)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -50,5 +51,15 @@ class MainActivity : AppCompatActivity()
                 return true
             }
         })
+
+        // Статистика
+        viewModel.allTasks.observe(this) { tasks ->
+            adapter.submitFullList(tasks)
+
+            // 🔹 Обновляем статистику
+            val doneCount = tasks.count { it.isDone }
+            val totalCount = tasks.size
+            binding.tvStats.text = "Выполнено: $doneCount / $totalCount"
+        }
     }
 }
