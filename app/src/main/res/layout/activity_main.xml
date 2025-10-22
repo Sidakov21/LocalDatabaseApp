@@ -9,15 +9,18 @@
 
     <EditText
         android:id="@+id/etTitle"
-        android:hint="Название задачи"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:hint="Название задачи"
+        android:minHeight="48dp" />
 
     <EditText
         android:id="@+id/etCategory"
-        android:hint="Категория"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:hint="Категория"
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/btnAdd"
