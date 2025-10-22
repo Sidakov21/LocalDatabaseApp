@@ -1,47 +1,42 @@
 package com.example.localdatabaseapp
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.localdatabaseapp.ui.theme.LocalDatabaseAppTheme
+import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.localdatabaseapp.databinding.ActivityMainBinding
+import com.example.localdatabaseapp.viewmodel.TaskViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity()
+{
+    private lateinit var binding: ActivityMainBinding
+    private val viewModel: TaskViewModel by viewModels()
+    private lateinit var adapter: TaskAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            LocalDatabaseAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        adapter = TaskAdapter { task -> viewModel.updateTask(task.copy(isDone = !task.isDone)) }
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = adapter
+
+        // Наблюдаем за изменениями
+        viewModel.allTasks.observe(this) { tasks ->
+            adapter.submitList(tasks)
+        }
+
+        // Добавление задачи
+        binding.btnAdd.setOnClickListener {
+            val title = binding.etTitle.text.toString()
+            val category = binding.etCategory.text.toString()
+            if (title.isNotEmpty()) {
+                viewModel.addTask(title, category)
+                binding.etTitle.text.clear()
+                binding.etCategory.text.clear()
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    LocalDatabaseAppTheme {
-        Greeting("Android")
     }
 }

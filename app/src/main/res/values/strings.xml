@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">LocalDatabaseApp</string>
+    <string name="title_activity_main">activity_main</string>
 </resources>
